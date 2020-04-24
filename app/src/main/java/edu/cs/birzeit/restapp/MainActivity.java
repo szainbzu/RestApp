@@ -1,6 +1,7 @@
 package edu.cs.birzeit.restapp;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
@@ -33,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         EditText edtCat = (EditText)findViewById(R.id.edtCat);
 
-        String url = "http://10.0.2.2/rest/info.php?cat=" + edtCat.getText();
-
+        //String url = "http://10.0.2.2:8080/topics/" + edtCat.getText();
+        String url = "http://10.0.2.2:8080/rest/info.php?cat=" + edtCat.getText();
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.INTERNET)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -109,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
         }
         return str;
     }
+
+    public void btnOpenOnClick(View view) {
+        Intent intent = new Intent(this, SecondActivity.class);
+        startActivity(intent);
+    }
+
     private class DownloadTextTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -117,13 +124,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
            //Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
-            String[] books = result.split(",");
-            String str = "";
-            for(String s : books){
-                str+= s + "\n";
-            }
+            //String[] books = result.split(",");
+            //String str = "";
+            //for(String s : books){
+            //    str+= s + "\n";
+           // }
             EditText edtData = (EditText)findViewById(R.id.edtData);
-            edtData.setText(str);
+            edtData.setText(result);
         }
     }
 }
