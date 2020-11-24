@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickbtn(View view) {
 
-        EditText edtCat = (EditText)findViewById(R.id.edtCat);
+        EditText edtCat = findViewById(R.id.edtCat);
 
-        //String url = "http://10.0.2.2:8080/topics/" + edtCat.getText();
-        String url = "http://10.0.2.2:8080/rest/info.php?cat=" + edtCat.getText();
+
+        String url = "http://10.0.2.2:84/rest/info.php?cat=" + edtCat.getText();
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.INTERNET)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             //for(String s : books){
             //    str+= s + "\n";
            // }
-            EditText edtData = (EditText)findViewById(R.id.edtData);
+            EditText edtData = findViewById(R.id.edtData);
             edtData.setText(result);
         }
     }

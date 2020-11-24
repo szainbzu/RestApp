@@ -32,9 +32,9 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void setUpViews() {
-        edtBookTitle = (EditText) findViewById(R.id.edtBookTitle);
-        edtBookCategory = (EditText)findViewById(R.id.edtBookCategory);
-        edtBookPages = (EditText)findViewById(R.id.edtBookPages);
+        edtBookTitle =  findViewById(R.id.edtBookTitle);
+        edtBookCategory = findViewById(R.id.edtBookCategory);
+        edtBookPages = findViewById(R.id.edtBookPages);
     }
 
     private String processRequest(String restUrl) throws UnsupportedEncodingException {
@@ -87,7 +87,7 @@ public class SecondActivity extends AppCompatActivity {
         }
         catch(Exception ex)
         {
-
+            ex.printStackTrace();
         }
         finally
         {
@@ -97,7 +97,9 @@ public class SecondActivity extends AppCompatActivity {
                 reader.close();
             }
 
-            catch(Exception ex) {}
+            catch(Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
         // Show response on activity
@@ -125,7 +127,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void btnAddOnClick(View view) {
-        String restUrl = "http://10.0.2.2:8080/rest/addbook.php";
+        String restUrl = "http://10.0.2.2:84/rest/addbook.php";
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.INTERNET)
                 != PackageManager.PERMISSION_GRANTED) {
