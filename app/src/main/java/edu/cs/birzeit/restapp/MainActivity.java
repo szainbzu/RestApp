@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +24,12 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class MainActivity extends AppCompatActivity {
-
+    private EditText edtData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        edtData = findViewById(R.id.edtData);
     }
 
     public void onClickbtn(View view) {
@@ -45,14 +47,18 @@ public class MainActivity extends AppCompatActivity {
                     123);
 
         } else{
-            DownloadTextTask runner = new DownloadTextTask();
-            runner.execute(url);
+
+
+            Thread thread = new Thread(new MyTask(url));
+            thread.start();
+
         }
 
 
 
     }
-    private InputStream OpenHttpConnection(String urlString) throws IOException
+
+   private InputStream OpenHttpConnection(String urlString) throws IOException
     {
         InputStream in = null;
         int response = -1;
@@ -116,21 +122,23 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private class DownloadTextTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            return DownloadText(urls[0]);
+    private class MyTask implements Runnable{
+        private String url;
+
+        public MyTask(String url){
+            this.url = url;
         }
         @Override
-        protected void onPostExecute(String result) {
-           //Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
-            //String[] books = result.split(",");
-            //String str = "";
-            //for(String s : books){
-            //    str+= s + "\n";
-           // }
-            EditText edtData = findViewById(R.id.edtData);
-            edtData.setText(result);
+        public void run() {
+            final String result = DownloadText(url);
+
+            edtData.post(new Runnable() {
+                @Override
+                public void run() {
+                    edtData.setText(result);
+                }
+            });
+
         }
     }
 }

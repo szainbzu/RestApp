@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -23,18 +24,22 @@ public class SecondActivity extends AppCompatActivity {
     private EditText edtBookTitle;
     private EditText edtBookCategory;
     private EditText edtBookPages;
+    private TextView txtResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_second);
         setUpViews();
 
     }
 
     private void setUpViews() {
+
         edtBookTitle =  findViewById(R.id.edtBookTitle);
         edtBookCategory = findViewById(R.id.edtBookCategory);
         edtBookPages = findViewById(R.id.edtBookPages);
+        txtResult = findViewById(R.id.txtResult);
     }
 
     private String processRequest(String restUrl) throws UnsupportedEncodingException {
@@ -109,20 +114,27 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    private class SendPostRequest extends AsyncTask<String, Void, String> {
+   class MyTask2 implements Runnable{
+        private String url;
+        public MyTask2(String url){
+            this.url = url;
+        }
+
         @Override
-        protected String doInBackground(String... urls) {
+        public void run() {
+             final String result;
             try {
-                return processRequest(urls[0]);
+                result = processRequest(url);
+                txtResult.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtResult.setText(result);
+                    }
+                });
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            return "";
-        }
-        @Override
-        protected void onPostExecute(String result) {
 
-            Toast.makeText(SecondActivity.this, result, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -137,8 +149,11 @@ public class SecondActivity extends AppCompatActivity {
                     123);
 
         } else{
-            SendPostRequest runner = new SendPostRequest();
-            runner.execute(restUrl);
+            /*SendPostRequest runner = new SendPostRequest();
+            runner.execute(restUrl);*/
+
+            Thread thread = new Thread(new MyTask2(restUrl));
+            thread.start();
         }
     }
 }

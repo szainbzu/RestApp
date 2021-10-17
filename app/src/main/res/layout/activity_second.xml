@@ -50,5 +50,10 @@
         android:text="Add"
         android:onClick="btnAddOnClick"/>
 
+    <TextView
+        android:id="@+id/txtResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 </LinearLayout>
